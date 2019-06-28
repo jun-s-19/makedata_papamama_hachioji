@@ -1,0 +1,2 @@
+# makedata_papamama_hachioji
+パパママ保育園マップ用のデータを作成するためのpythonプログラムです
