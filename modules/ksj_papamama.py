@@ -1,7 +1,7 @@
 #%%
 """
-東京都の行政区域のデータ(geojson形式)を読み込んで、指定した都市市の行政区域のデータのみ取り出して
-ファイル(geojson形式)にして出力
+行政区域のデータ(geojson形式)を読み込んで、指定した都市市の行政区域のデータのみ取り出し,
+さらに、Papamama保育園マップにあった形式に変換して、ファイル(geojson形式)にして出力する関数群を定義
 - 入力ファイルの仕様
 　国土数値情報　行政区域データ
 　http://nlftp.mlit.go.jp/ksj/jpgis/datalist/KsjTmplt-N03.html
@@ -14,12 +14,29 @@ import numpy as np
 from shapely.geometry import Point, Polygon
 from IPython.core.display import display        
 
-
-# -------------------------------------------------------------------------------
+# ------------------------------------------
 # N03(行政区域関連)の関数
-# -------------------------------------------------------------------------------
-
+# ------------------------------------------
 def district_henkan(source_filepath, target_filepath, prefecture_name, city_name):
+    """国土数値情報データのN03(行政区域関連)のファイル(geojson)から、
+    指定した都道府県、都市のデータを抜き出してファイル(geojson)に出力
+    
+    Parameters
+    ----------
+    source_filepath : str
+        入力ファイルのパス名
+    target_filepath : str
+        出力ファイルのパス名
+    prefecture_name : str
+        都道府県名(例：東京都)
+    city_name : str
+        都市名(例：八王子市)
+    
+    Returns
+    -------
+    dictionary
+        抽出された都市のみ含むデータ(geojson形式）
+    """
     # geojsonファイルを読み込む
     with open(source_filepath, 'r') as f:
         district_geojson_all = json.load(f)
@@ -42,11 +59,28 @@ def district_henkan(source_filepath, target_filepath, prefecture_name, city_name
     return district_geojson_target
 
 
-
-# -------------------------------------------------------------------------------
-# A27(小学校関連)の関数
-# -------------------------------------------------------------------------------
+# ------------------------------------------
+# # A27(小学校関連)の関数
+# ------------------------------------------
 def elementaryLoc_henkan(source_loc_filepath, target_loc_filepath, city_name):
+    """国土数値情報データのA27の小学校の位置情報データ(geojson形式）から、
+    指定した都市のデータを抜き出し、Papamama保育園マップ用に形式変換して
+    小学校の位置情報データ(geojson形式）に出力
+    
+    Parameters
+    ----------
+    source_loc_filepath : str
+        入力ファイルのパス名
+    target_loc_filepath : str
+        出力ファイルのパス名
+    city_name : str
+        抽出対象の都市名(例：八王子市)
+    
+    Returns
+    -------
+    dictionary
+        抽出された都市のみ含む小学校の位置情報データ(geojson形式）
+    """
     # geojsonファイルを読み込む
     with open(source_loc_filepath, 'r') as f:
         elementary_loc_all = json.load(f)
@@ -89,10 +123,27 @@ def elementaryLoc_henkan(source_loc_filepath, target_loc_filepath, city_name):
 
 
 def elementaryPoly_henkan(source_poly_filepath, target_poly_filepath, target_loc_filepath, city_name):
-    # ------------------------------------------------------------------
-    # 小学校のポリゴンデータから指定した都市のデータを取り出す
-    # ------------------------------------------------------------------
-    # A27-16_13.geojson
+    """国土数値情報データのA27の小学校のポリゴンデータ(geojson形式）から、
+    指定した都市のデータを抜き出し、Papamama保育園マップ用に形式変換して
+    小学校のポリゴンデータ(geojson形式）に出力
+    
+    Parameters
+    ----------
+    source_poly_filepath : str
+        入力ファイルのパス名
+    target_poly_filepath : str
+        出力ファイルのパス名
+    target_loc_filepath : str
+        対象の都市の小学校の位置情報データ(geojson)のファイルのパス名
+    city_name: str
+        対象の都市名
+    
+    Returns
+    -------
+    dictionary
+        抽出された都市のみ含む小学校のポリゴンデータ(geojson形式）
+    """
+
     # geojsonファイルをdictionary型でload
     with open(source_poly_filepath, 'r') as f:
         elementary_poly_all = json.load(f)
@@ -144,10 +195,28 @@ def elementaryPoly_henkan(source_poly_filepath, target_poly_filepath, target_loc
     return elementary_poly_target
 
 
-# -------------------------------------------------------------------------------
+# ------------------------------------------
 # A32(中学校関連)の関数
-# -------------------------------------------------------------------------------
+# ------------------------------------------
 def middleschoolLoc_henkan(source_loc_filepath, target_loc_filepath, city_name):
+    """国土数値情報データのA32の中学校の位置情報データ(geojson形式）から、
+    指定した都市のデータを抜き出し、Papamama保育園マップ用に形式変換して
+    中学校の位置情報データ(geojson形式）に出力
+    
+    Parameters
+    ----------
+    source_loc_filepath : str
+        入力ファイルのパス名
+    target_loc_filepath : str
+        出力ファイルのパス名
+    city_name : str
+        抽出対象の都市名(例：八王子市)
+    
+    Returns
+    -------
+    dictionary
+        抽出された都市のみ含む中学校の位置情報データ(geojson形式）
+    """
     # geojsonファイルを読み込む
     with open(source_loc_filepath, 'r') as f:
         middleschool_loc_all = json.load(f)
@@ -189,9 +258,27 @@ def middleschoolLoc_henkan(source_loc_filepath, target_loc_filepath, city_name):
 
 
 def middleschoolPoly_henkan(source_poly_filepath, target_poly_filepath, target_loc_filepath, city_name):
-    # ------------------------------------------------------------------
-    # 中学校のポリゴンデータから指定した都市市のデータを取り出す
-    # ------------------------------------------------------------------
+    """国土数値情報データのA32の中学校のポリゴンデータ(geojson形式）から、
+    指定した都市のデータを抜き出し、Papamama保育園マップ用に形式変換して
+    中学校のポリゴンデータ(geojson形式）に出力
+    
+    Parameters
+    ----------
+    source_poly_filepath : str
+        入力ファイルのパス名
+    target_poly_filepath : str
+        出力ファイルのパス名
+    target_loc_filepath : str
+        対象の都市の中学校の位置情報データ(geojson)のファイルのパス名
+    city_name: str
+        対象の都市名
+    
+    Returns
+    -------
+    dictionary
+        抽出された都市のみ含む中学校のポリゴンデータ(geojson形式）
+    """
+
     # geojsonファイルをdictionary型でload
     with open(source_poly_filepath, 'r') as f:
         middleschool_poly_all = json.load(f)
@@ -244,10 +331,9 @@ def middleschoolPoly_henkan(source_poly_filepath, target_poly_filepath, target_l
     return middleschool_poly_target
 
 
-# -------------------------------------------------------------------------------
+# ------------------------------------------
 # N02(鉄道関連)の関数
-# -------------------------------------------------------------------------------
-
+# ------------------------------------------
 def avg_point(point_list):
     # 複数の点の座標の中心を求める
     sum_point = np.array([0.0, 0.0])
@@ -269,6 +355,24 @@ def point_within_polygon(point_coord, polygon_coord):
 
 
 def stationLoc_henkan(source_loc_filepath, target_loc_filepath, city_polygon_filepath):
+    """国土数値情報データのN02の鉄道の駅のデータ(geojson形式）から、
+    指定した都市のデータを抜き出し、Papamama保育園マップ用に形式変換して
+    駅の位置情報データ(geojson形式）に出力
+    
+    Parameters
+    ----------
+    source_loc_filepath : str
+        入力ファイルのパス名
+    target_loc_filepath : str
+        出力ファイルのパス名
+    city_polygon_filepath : [type]
+        対象の都市の行政区域のポリゴンデータのファイルのパス名
+    
+    Returns
+    -------
+    dictionary
+        対象の都市の駅のポリゴンデータ
+    """
 
     # geojsonファイルを読み込む
     with open(source_loc_filepath, 'r') as f:
