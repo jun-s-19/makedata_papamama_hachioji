@@ -1,17 +1,15 @@
 #%%
 """
-行政区域のデータ(geojson形式)を読み込んで、指定した都市市の行政区域のデータのみ取り出して
-Papamamaマップにあう形式のファイル(geojson形式)にして出力
+Papamama保育園マップのアプリ用に適した形式(geojson)に保育園、小学校、中学校、駅の
+データを変換するPythonスクリプト
 """
 
 #%%
 # モジュールインポート
 from pathlib import Path
-import sys
 
 from modules import ksj_papamama
 from modules import nursery_hachioji_papamama
-
 
 #%%
 # パラメータ設定
@@ -20,9 +18,22 @@ city_name = '八王子市'
 pathname_dataorig = './data_orig/'
 
 #%%
-# data_origディレクトリに必要なファイルが揃っているかをチェック
-
+# 指定したディレクトリ内に、指定した形式のファイル名のファイルが揃っているかをチェック
 def file_exist(pathname, file_expression):
+    """指定したディレクトリ内に、指定した形式のファイル名のファイルがあるかを調べる
+    
+    Parameters
+    ----------
+    pathname : [str]
+        対象とするディレクトリのパス名
+    file_expression : [str]
+        ファイル名の形式を指定(例: N03-*.geojson)
+    
+    Returns
+    -------
+    [str]
+        最初に条件にヒットしたファイルのパス
+    """
     p = Path(pathname)
     try:
         file_pathname = str(list(p.glob(file_expression))[0])
