@@ -1,8 +1,7 @@
 #%%
 '''
 八王子市の保育施設一覧(Excel)のオープンデータを
-保育所マップのアプリであるPapamamaマップ用に変換する関数群を作成。
-最初にCSV形式にして出力し、次にそのファイルをgeojson形式に変換します。
+保育所マップのアプリであるPapamamaマップ用に変換する関数群です。
 https://www.city.hachioji.tokyo.jp/contents/open/002/p005871.html
 
 '''
@@ -62,7 +61,23 @@ def extract_Ownership(type):
 
 
 def henkan_nursely_hachioji(source_filepath, target_csv_filepath, target_geojson_filepath):
+    """八王子市の保育施設一覧のオープンデータ(Excelファイル)を変換して、
+    Papamama保育園マップにあった形式(geojson)にして出力
 
+    Parameters
+    ----------
+    source_filepath : str
+        入力ファイルのパス名
+    target_csv_filepath : str
+        出力ファイルのパス名(csv)
+    target_geojson_filepath : str
+        出力ファイルのパス名(geojson)
+
+    Returns
+    -------
+    dictionary
+        変換された、Papamama保育園マップの保育園に関するデータ
+    """
     df_orig = pd.read_excel(source_filepath)
     df = df_orig.copy()
 
